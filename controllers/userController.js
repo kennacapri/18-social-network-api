@@ -69,6 +69,7 @@ createUser(req, res) {
 
     // remove a friend
     deleteFriend(req, res) {
+        // it's update instead of delete because we aren't deleting a user, just a friend
         User.findOneAndUpdate(
             {_id: req.params.userId},
             {$pull: {friends:req.params.friendId}}
