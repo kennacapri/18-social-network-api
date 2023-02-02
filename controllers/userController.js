@@ -30,7 +30,8 @@ createUser(req, res) {
     updateUser(req, res) {
         User.findOneAndUpdate(
             {_id: req.params.userId},
-            {username: req.body.username}
+            {username: req.body.username},
+            {email: req.body.email}
         )
         .then((user) =>
              !user
