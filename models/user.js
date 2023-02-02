@@ -1,16 +1,17 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const { Schema, model } = require('mongoose');
+
 
 const userSchema = new Schema(
   {
     username: {
-      type: "string",
+      type: String,
       unique: true,
       required: true,
       trim: true,
     },
+    // used mongoose matching validation for email match
     email: {
-      type: "string",
+      type: String,
       unique: true,
       required: true,
       match: /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,
@@ -18,13 +19,13 @@ const userSchema = new Schema(
     thoughts: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Thought",
+        ref: 'thought',
       },
     ],
     friends: [
       {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: 'user',
       },
     ],
   },
@@ -35,11 +36,11 @@ const userSchema = new Schema(
     id: false,
   }
 );
-
-userSchema.virtual("friendCount").get(function () {
+// virtual that retrieves the length of the users friends array
+userSchema.virtual('friendCount').get(function () {
   return this.friends.length;
-});
+})
 
-const User = model("user", userSchema);
+const User = model('user', userSchema);
 
 module.exports = User;

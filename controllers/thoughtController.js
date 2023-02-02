@@ -9,8 +9,8 @@ module.exports = {
     },
 
     // get a single thought
-    getSingleUser(req, res) {
-        User.findThought({ _id: req.params.userId })
+    getSingleThought(req, res) {
+        Thought.findOne({ _id: req.params.thoughtId })
         .then((thought) =>
             !thought
                 ? res.status(404).json({ message: 'No thought found with that id' })
@@ -38,9 +38,9 @@ createThought(req, res) {
     },
 
     // update a thought
-    updateUser(req, res) {
+    updateThought(req, res) {
         Thought.findOneAndUpdate(
-            {_id: req.params.userId},
+            {_id: req.params.thoughtId},
             {thoughtText: req.body.thoughtText}
         )
         .then((thought) =>
@@ -53,13 +53,13 @@ createThought(req, res) {
 
     // delete a thought
     deleteThought(req, res) {
-        thought.findOneAndDelete(
+        Thought.findOneAndDelete(
             {_id: req.params.thoughtId}
         )
         .then((thought) =>
              !thought
             ? res.status(404).json({message: 'No thought found with that id'})
-            : User.findOneAndDelete(
+            : User.findOneAndUpdate(
                 {thoughts: req.params.thoughtId},
                 {$pull: {thoughts: req.params.thoughtId}}
             )
@@ -89,9 +89,9 @@ createThought(req, res) {
     // remove a reaction
     deleteReaction(req, res) {
         // it's update instead of delete because we aren't deleting a user, just a reaction
-        User.findOneAndUpdate(
+        Thought.findOneAndUpdate(
             {_id: req.params.thoughtId},
-            {$pull: {reactions:req.params.reactionId}}
+            {$pull: {reactions: { _id:req.params.reactionId}}}
         )
         .then((thought) =>
              !thought
